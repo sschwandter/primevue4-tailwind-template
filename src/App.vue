@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
+import { useDark } from "@vueuse/core";
 
-const isDark = ref(document.documentElement.classList.contains("dark"));
-
-function toggleDark() {
-  isDark.value = !isDark.value;
-  document.documentElement.classList.toggle("dark", isDark.value);
-}
+const isDark = useDark();
+const toggleDark = () => (isDark.value = !isDark.value);
 </script>
 
 <template>
