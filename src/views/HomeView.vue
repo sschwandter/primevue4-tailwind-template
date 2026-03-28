@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import Timeline from "primevue/timeline";
+import TextWithLinks from "@/components/TextWithLinks.vue";
 
-type TextPart = string | { text: string; url: string };
+import type { TextWithLinksPart } from "@/components/TextWithLinks.vue";
 
 interface TimelineItem {
   icon: string;
   title: string;
-  parts: TextPart[];
+  parts: TextWithLinksPart[];
 }
 const items: TimelineItem[] = [
   {
@@ -97,17 +98,7 @@ const items: TimelineItem[] = [
             {{ item.title }}
           </h3>
           <p class="text-surface-700 dark:text-surface-200">
-            <template v-for="(part, i) in item.parts" :key="i">
-              <a
-                v-if="typeof part === 'object'"
-                :href="part.url"
-                target="_blank"
-                rel="noopener"
-                class="text-primary hover:underline"
-                >{{ part.text }}</a
-              >
-              <template v-else>{{ part }}</template>
-            </template>
+            <TextWithLinks :parts="item.parts" />
           </p>
         </div>
       </template>
