@@ -1,31 +1,82 @@
 <script setup lang="ts">
 import Timeline from "primevue/timeline";
 
-const items = [
+type TextPart = string | { text: string; url: string };
+
+interface TimelineItem {
+  icon: string;
+  title: string;
+  parts: TextPart[];
+}
+const items: TimelineItem[] = [
   {
     icon: "pi pi-book",
     title: "Documentation",
-    content: `Vue's <a href="https://vuejs.org/" target="_blank" rel="noopener">official documentation</a> provides you with all information you need to get started.`,
+    parts: [
+      "Vue's ",
+      { text: "official documentation", url: "https://vuejs.org/" },
+      " provides you with all information you need to get started.",
+    ],
   },
   {
     icon: "pi pi-wrench",
     title: "Tooling",
-    content: `This project is served and bundled with <a href="https://vite.dev/guide/features.html" target="_blank" rel="noopener">Vite</a>. The recommended IDE setup is <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VSCode</a> + <a href="https://github.com/vuejs/language-tools" target="_blank" rel="noopener">Vue - Official</a>. If you need to test your components and web pages, check out <a href="https://vitest.dev/" target="_blank" rel="noopener">Vitest</a> and <a href="https://www.cypress.io/" target="_blank" rel="noopener">Cypress</a> / <a href="https://playwright.dev/" target="_blank" rel="noopener">Playwright</a>.`,
+    parts: [
+      "This project is served and bundled with ",
+      { text: "Vite", url: "https://vite.dev/guide/features.html" },
+      ". The recommended IDE setup is ",
+      { text: "VSCode", url: "https://code.visualstudio.com/" },
+      " + ",
+      { text: "Vue - Official", url: "https://github.com/vuejs/language-tools" },
+      ". If you need to test your components and web pages, check out ",
+      { text: "Vitest", url: "https://vitest.dev/" },
+      " and ",
+      { text: "Cypress", url: "https://www.cypress.io/" },
+      " / ",
+      { text: "Playwright", url: "https://playwright.dev/" },
+      ".",
+    ],
   },
   {
     icon: "pi pi-box",
     title: "Ecosystem",
-    content: `Get official tools and libraries for your project: <a href="https://pinia.vuejs.org/" target="_blank" rel="noopener">Pinia</a>, <a href="https://router.vuejs.org/" target="_blank" rel="noopener">Vue Router</a>, <a href="https://test-utils.vuejs.org/" target="_blank" rel="noopener">Vue Test Utils</a>, and <a href="https://github.com/vuejs/devtools" target="_blank" rel="noopener">Vue Dev Tools</a>. If you need more resources, we suggest paying <a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">Awesome Vue</a> a visit.`,
+    parts: [
+      "Get official tools and libraries for your project: ",
+      { text: "Pinia", url: "https://pinia.vuejs.org/" },
+      ", ",
+      { text: "Vue Router", url: "https://router.vuejs.org/" },
+      ", ",
+      { text: "Vue Test Utils", url: "https://test-utils.vuejs.org/" },
+      ", and ",
+      { text: "Vue Dev Tools", url: "https://github.com/vuejs/devtools" },
+      ". If you need more resources, we suggest paying ",
+      { text: "Awesome Vue", url: "https://github.com/vuejs/awesome-vue" },
+      " a visit.",
+    ],
   },
   {
     icon: "pi pi-users",
     title: "Community",
-    content: `Got stuck? Ask your question on <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a> (our official Discord server), or <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener">StackOverflow</a>. You should also follow the official <a href="https://bsky.app/profile/vuejs.org" target="_blank" rel="noopener">@vuejs.org</a> Bluesky account or the <a href="https://x.com/vuejs" target="_blank" rel="noopener">@vuejs</a> X account for latest news in the Vue world.`,
+    parts: [
+      "Got stuck? Ask your question on ",
+      { text: "Vue Land", url: "https://chat.vuejs.org" },
+      " (our official Discord server), or ",
+      { text: "StackOverflow", url: "https://stackoverflow.com/questions/tagged/vue.js" },
+      ". You should also follow the official ",
+      { text: "@vuejs.org", url: "https://bsky.app/profile/vuejs.org" },
+      " Bluesky account or the ",
+      { text: "@vuejs", url: "https://x.com/vuejs" },
+      " X account for latest news in the Vue world.",
+    ],
   },
   {
     icon: "pi pi-heart",
     title: "Support Vue",
-    content: `As an independent project, Vue relies on community backing for its sustainability. You can help us by <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.`,
+    parts: [
+      "As an independent project, Vue relies on community backing for its sustainability. You can help us by ",
+      { text: "becoming a sponsor", url: "https://vuejs.org/sponsor/" },
+      ".",
+    ],
   },
 ];
 </script>
@@ -45,8 +96,19 @@ const items = [
           <h3 class="text-xl font-medium mb-1 text-surface-900 dark:text-surface-0">
             {{ item.title }}
           </h3>
-          <!-- eslint-disable-next-line vue/no-v-html -- static content, no XSS risk -->
-          <p class="text-surface-700 dark:text-surface-200" v-html="item.content" />
+          <p class="text-surface-700 dark:text-surface-200">
+            <template v-for="(part, i) in item.parts" :key="i">
+              <a
+                v-if="typeof part === 'object'"
+                :href="part.url"
+                target="_blank"
+                rel="noopener"
+                class="text-primary hover:underline"
+                >{{ part.text }}</a
+              >
+              <template v-else>{{ part }}</template>
+            </template>
+          </p>
         </div>
       </template>
     </Timeline>
