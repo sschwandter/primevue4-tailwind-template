@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 
 const isDark = ref(document.documentElement.classList.contains('dark'))
 
@@ -16,7 +15,13 @@ function toggleDark() {
     <img alt="Vue logo" class="block mx-auto mb-8 lg:mx-0 lg:mr-8 lg:mb-0" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="lg:flex lg:items-start lg:flex-wrap">
-      <HelloWorld msg="You did it!" />
+      <div class="text-center lg:text-left">
+        <h1 class="font-medium text-[2.6rem] text-primary">You did it!</h1>
+        <h3 class="text-xl">You've successfully created a project with
+          <a href="https://vite.dev/" target="_blank" rel="noopener">Vite</a> +
+          <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>. What's next?
+        </h3>
+      </div>
 
       <nav class="w-full text-xs text-center mt-8 lg:text-left lg:-ml-4 lg:text-base lg:py-4 lg:mt-4">
         <RouterLink to="/" class="inline-block px-4 border-l border-surface-200 dark:border-surface-700 first:border-0">Home</RouterLink>
