@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { ofetch } from "ofetch";
 import { logger } from "@/utils/logger";
-
-const log = log.withTag("youtube");
 import Card from "primevue/card";
 import ProgressSpinner from "primevue/progressspinner";
 import Message from "primevue/message";
+
+const log = logger.withTag("youtube");
 
 interface Video {
   id: string;
@@ -30,18 +31,14 @@ async function fetchVideos() {
   }
 
   try {
-    const params = new URLSearchParams({
-      part: "snippet",
-      chart: "mostPopular",
-      maxResults: "12",
-      key: API_KEY,
+    const data = await ofetch("https://www.googleapis.com/youtube/v3/videos", {
+      query: {
+        part: "snippet",
+        chart: "mostPopular",
+        maxResults: 12,
+        key: API_KEY,
+      },
     });
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?${params}`);
-    if (!res.ok) {
-      const body = await res.json();
-      throw new Error(body.error?.message ?? `HTTP ${res.status}`);
-    }
-    const data = await res.json();
     videos.value = data.items.map(
       (item: {
         id: string;
