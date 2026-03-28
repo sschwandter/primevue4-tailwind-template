@@ -1,0 +1,9 @@
+@layer theme, base, primevue, components, utilities;
+@import 'tailwindcss';
+@plugin 'tailwindcss-primeui';
+@custom-variant dark (&:where(.dark, .dark *));
+@import './base.css';
+
+@theme {
+  --spacing-section: 160px;
+}
