@@ -11,6 +11,7 @@
 - [x] Vitest (unit testing)
 - [x] VueUse
 - [x] EditorConfig, VS Code extensions
+- [x] consola (structured logging)
 
 ## To Do
 

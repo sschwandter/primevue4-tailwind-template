@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { logger } from "@/utils/logger";
+
+const log = log.withTag("youtube");
 import Card from "primevue/card";
 import ProgressSpinner from "primevue/progressspinner";
 import Message from "primevue/message";
@@ -20,6 +23,7 @@ const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 
 async function fetchVideos() {
   if (!API_KEY || API_KEY === "your-api-key-here") {
+    log.warn("YouTube API key not configured. Set VITE_YOUTUBE_API_KEY in .env.local");
     error.value = "Set VITE_YOUTUBE_API_KEY in .env.local to use this page.";
     loading.value = false;
     return;
@@ -56,6 +60,7 @@ async function fetchVideos() {
       }),
     );
   } catch (e) {
+    log.error("Failed to fetch YouTube videos", e);
     error.value = e instanceof Error ? e.message : "Failed to fetch videos";
   } finally {
     loading.value = false;
