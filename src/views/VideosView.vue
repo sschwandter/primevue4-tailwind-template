@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { useQuery } from "@tanstack/vue-query";
 import { ofetch } from "ofetch";
 import { logger } from "@/utils/logger";
-import Card from "primevue/card";
-import ProgressSpinner from "primevue/progressspinner";
-import Message from "primevue/message";
 
 const log = logger.withTag("youtube");
 

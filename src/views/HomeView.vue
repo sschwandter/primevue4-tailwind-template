@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import Timeline from "primevue/timeline";
-import TextWithLinks from "@/components/TextWithLinks.vue";
-
 import type { TextWithLinksPart } from "@/components/TextWithLinks.vue";
 
 interface TimelineItem {

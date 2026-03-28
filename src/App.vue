@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
-import { useDark } from "@vueuse/core";
-import Menubar from "primevue/menubar";
-
 const isDark = useDark();
 const toggleDark = () => (isDark.value = !isDark.value);
 
