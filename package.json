@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@primeuix/themes": "^2.0.3",
+    "@tanstack/vue-query": "^5.95.2",
     "@vueuse/core": "^14.2.1",
     "consola": "^3.4.2",
     "ofetch": "^1.5.1",

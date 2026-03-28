@@ -25,7 +25,7 @@
 - [ ] **GitHub Actions CI** — lint + type-check + test on every PR
 - [ ] **Sentry** — error tracking and performance monitoring in production
 - [x] **ofetch** — modern HTTP client (auto JSON, retries, interceptors), replace raw `fetch`
-- [ ] **TanStack Vue Query** — data fetching/caching layer (loading states, refetching, stale-while-revalidate)
+- [x] **TanStack Vue Query** — data fetching/caching layer (loading states, refetching, stale-while-revalidate)
 - [ ] **rollup-plugin-visualizer** — bundle size analysis
 - [ ] **unplugin-vue-router** — type-safe file-based routing
 - [ ] **vue-i18n** — internationalization
