@@ -1,13 +1,12 @@
-const STORAGE_KEY = "theme";
-const DARK_CLASS = "dark";
+import { THEME_DARK_CLASS, THEME_STORAGE_KEY } from "@/theme/constants";
 
 export function useTheme() {
   const isDark = useDark({
     selector: "html",
     attribute: "class",
-    valueDark: DARK_CLASS,
+    valueDark: THEME_DARK_CLASS,
     valueLight: "",
-    storageKey: STORAGE_KEY,
+    storageKey: THEME_STORAGE_KEY,
   });
 
   const toggleTheme = () => {
@@ -20,4 +19,4 @@ export function useTheme() {
   };
 }
 
-export { DARK_CLASS, STORAGE_KEY };
+export { THEME_DARK_CLASS, THEME_STORAGE_KEY };

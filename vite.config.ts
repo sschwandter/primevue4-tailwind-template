@@ -7,9 +7,14 @@ import tailwindcss from "@tailwindcss/vite";
 import Components from "unplugin-vue-components/vite";
 import { PrimeVueResolver } from "unplugin-vue-components/resolvers";
 import AutoImport from "unplugin-auto-import/vite";
+import { THEME_DARK_CLASS, THEME_STORAGE_KEY } from "./src/theme/constants";
 
 // https://vite.dev/config/
 export default defineConfig({
+  define: {
+    __THEME_STORAGE_KEY__: JSON.stringify(THEME_STORAGE_KEY),
+    __THEME_DARK_CLASS__: JSON.stringify(THEME_DARK_CLASS),
+  },
   plugins: [
     tailwindcss(),
     vue(),
