@@ -13,8 +13,10 @@ const menuItems = [
 <template>
   <Menubar :model="menuItems">
     <template #item="{ item }">
-      <RouterLink :to="item.to" class="nav-link">
-        {{ item.label }}
+      <RouterLink v-slot="{ href, navigate }" custom :to="item.to">
+        <a :href="href" @click="navigate">
+          {{ item.label }}
+        </a>
       </RouterLink>
     </template>
     <template #start>
