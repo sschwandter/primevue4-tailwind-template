@@ -80,21 +80,19 @@ const items: TimelineItem[] = [
 </script>
 
 <template>
-  <main class="p-6">
+  <main class="app-page">
     <Timeline :value="items" layout="vertical" align="left">
       <template #marker="{ item }">
-        <span
-          class="flex items-center justify-center size-10 rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-950"
-        >
-          <i :class="item.icon" class="text-surface-700 dark:text-surface-200" />
+        <span class="timeline-marker-chip">
+          <i :class="item.icon" />
         </span>
       </template>
       <template #content="{ item }">
         <div class="mb-4">
-          <h3 class="text-xl font-medium mb-1 text-surface-900 dark:text-surface-0">
+          <h3 class="mb-1 text-xl font-semibold text-surface-900 dark:text-surface-0">
             {{ item.title }}
           </h3>
-          <p class="text-surface-700 dark:text-surface-200">
+          <p class="page-copy">
             <TextWithLinks :parts="item.parts" />
           </p>
         </div>

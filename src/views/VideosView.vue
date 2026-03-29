@@ -69,10 +69,8 @@ const errorMessage = computed(() => {
 </script>
 
 <template>
-  <main class="p-6">
-    <h1 class="text-2xl font-bold mb-6 text-surface-900 dark:text-surface-0">
-      Trending on YouTube
-    </h1>
+  <main class="app-page">
+    <h1 class="page-title">Trending on YouTube</h1>
 
     <div v-if="isLoading" class="flex justify-center py-12">
       <ProgressSpinner />
@@ -89,7 +87,7 @@ const errorMessage = computed(() => {
         rel="noopener"
         class="no-underline"
       >
-        <Card class="h-full hover:shadow-lg transition-shadow">
+        <Card class="surface-card h-full hover:shadow-lg">
           <template #header>
             <img :src="video.thumbnail" :alt="video.title" class="w-full rounded-t-lg" />
           </template>

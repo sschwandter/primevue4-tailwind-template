@@ -13,10 +13,7 @@ const menuItems = [
 <template>
   <Menubar :model="menuItems">
     <template #item="{ item }">
-      <RouterLink
-        :to="item.to"
-        class="px-3 py-2 text-surface-700 dark:text-surface-0 no-underline hover:text-primary"
-      >
+      <RouterLink :to="item.to" class="nav-link">
         {{ item.label }}
       </RouterLink>
     </template>
