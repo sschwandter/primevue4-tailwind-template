@@ -24,13 +24,15 @@ const menuItems = [
       <img alt="Vue logo" src="@/assets/logo.svg" width="40" height="40" class="mr-4" />
     </template>
     <template #end>
-      <button
-        class="bg-transparent border-none cursor-pointer text-xl p-2 text-surface-900 dark:text-surface-0"
+      <Button
+        rounded
+        text
+        severity="secondary"
+        size="small"
         :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        :icon="isDark ? 'pi pi-sun' : 'pi pi-moon'"
         @click="toggleTheme"
-      >
-        <i :class="isDark ? 'pi pi-sun' : 'pi pi-moon'" />
-      </button>
+      />
     </template>
   </Menubar>
 
