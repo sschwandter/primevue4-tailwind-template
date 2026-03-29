@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vite App</title>
     <script>
-      const stored = localStorage.getItem('vueuse-color-scheme')
+      // Keep these values aligned with src/composables/useTheme.ts.
+      const stored = localStorage.getItem('theme')
       if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
       }

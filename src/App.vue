@@ -1,6 +1,7 @@
 <script setup lang="ts">
-const isDark = useDark();
-const toggleDark = () => (isDark.value = !isDark.value);
+import { useTheme } from "@/composables/useTheme";
+
+const { isDark, toggleTheme } = useTheme();
 
 const menuItems = [
   { label: "Home", to: "/" },
@@ -26,7 +27,7 @@ const menuItems = [
       <button
         class="bg-transparent border-none cursor-pointer text-xl p-2 text-surface-900 dark:text-surface-0"
         :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-        @click="toggleDark"
+        @click="toggleTheme"
       >
         <i :class="isDark ? 'pi pi-sun' : 'pi pi-moon'" />
       </button>
