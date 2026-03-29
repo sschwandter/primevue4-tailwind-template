@@ -5,16 +5,15 @@
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vite App</title>
+    <script src="/theme-bootstrap.js"></script>
     <script>
-      let stored = null
-
-      try {
-        stored = localStorage.getItem(__THEME_STORAGE_KEY__)
-      } catch {}
-
-      if (stored === __THEME_DARK_CLASS__ || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add(__THEME_DARK_CLASS__)
-      }
+      window.__appBootstrapTheme.applyInitialThemeClass({
+        darkClass: __THEME_DARK_CLASS__,
+        storageKey: __THEME_STORAGE_KEY__,
+        storage: localStorage,
+        matchMedia: window.matchMedia.bind(window),
+        documentElement: document.documentElement,
+      })
     </script>
   </head>
   <body class="bg-surface-0 dark:bg-surface-950 text-surface-900 dark:text-surface-0 min-h-screen transition-colors duration-500">

@@ -31,7 +31,11 @@ export interface Video {
   publishedAt: string;
 }
 
-export const hasYouTubeApiKey = Boolean(API_KEY && API_KEY !== "your-api-key-here");
+export function isYouTubeApiKeyConfigured(apiKey: string | undefined) {
+  return Boolean(apiKey && apiKey !== "your-api-key-here");
+}
+
+export const hasYouTubeApiKey = isYouTubeApiKeyConfigured(API_KEY);
 
 export function useTrendingVideosQuery() {
   return useQuery<Video[]>({
