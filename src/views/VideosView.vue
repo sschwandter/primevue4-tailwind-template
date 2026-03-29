@@ -1,67 +1,17 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
-import { ofetch } from "ofetch";
-import { logger } from "@/utils/logger";
+import {
+  hasYouTubeApiKey,
+  useTrendingVideosQuery,
+  warnIfYouTubeApiKeyMissing,
+} from "@/composables/trendingVideosQuery";
 
-const log = logger.withTag("youtube");
+const { data: videos, isLoading, error } = useTrendingVideosQuery();
 
-interface Video {
-  id: string;
-  title: string;
-  thumbnail: string;
-  channelTitle: string;
-  publishedAt: string;
-}
-
-const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
-const hasKey = API_KEY && API_KEY !== "your-api-key-here";
-
-const {
-  data: videos,
-  isLoading,
-  error,
-} = useQuery<Video[]>({
-  queryKey: ["youtube", "trending"],
-  queryFn: async () => {
-    const data = await ofetch("https://www.googleapis.com/youtube/v3/videos", {
-      query: {
-        part: "snippet",
-        chart: "mostPopular",
-        maxResults: 12,
-        key: API_KEY,
-      },
-    });
-    return data.items.map(
-      (item: {
-        id: string;
-        snippet: {
-          title: string;
-          thumbnails: { medium: { url: string } };
-          channelTitle: string;
-          publishedAt: string;
-        };
-      }) => ({
-        id: item.id,
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.medium.url,
-        channelTitle: item.snippet.channelTitle,
-        publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString(),
-      }),
-    );
-  },
-  enabled: hasKey,
-  staleTime: 5 * 60 * 1000,
-  retry: 1,
-});
-
-if (!hasKey) {
-  log.warn("YouTube API key not configured. Set VITE_YOUTUBE_API_KEY in .env.local");
-}
+warnIfYouTubeApiKeyMissing();
 
 const errorMessage = computed(() => {
-  if (!hasKey) return "Set VITE_YOUTUBE_API_KEY in .env.local to use this page.";
+  if (!hasYouTubeApiKey) return "Set VITE_YOUTUBE_API_KEY in .env.local to use this page.";
   if (error.value) {
-    log.error("Failed to fetch YouTube videos", error.value);
     return error.value.message;
   }
   return null;
