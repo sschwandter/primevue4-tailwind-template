@@ -11,14 +11,15 @@ This document describes how the app is currently structured and how to extend it
 - Vue Query handles async server-state fetching
 - PrimeVue provides UI components
 - Tailwind CSS 4 provides utility classes and a small set of shared app primitives
+- VueUse handles dark-mode persistence and browser preference integration
 
 ## Entry Point
 
-The application boots in [`src/main.ts`](/Users/stefan/src/playground/claude-code/my-app/src/main.ts).
+The application boots in `src/main.ts`.
 
 Responsibilities:
 
-- imports global font and CSS
+- imports the global font, PrimeIcons, and app CSS
 - creates the Vue app
 - registers Pinia
 - registers Vue Query
@@ -29,11 +30,12 @@ If you add new app-wide plugins, `src/main.ts` is the place to wire them in.
 
 ## App Shell
 
-[`src/App.vue`](/Users/stefan/src/playground/claude-code/my-app/src/App.vue) is the shell component.
+`src/App.vue` is the shell component.
 
 Current responsibilities:
 
 - renders the top-level navigation with `Menubar`
+- defines the navigation entries for Home, Videos, and About
 - owns the theme toggle UI
 - renders the current route via `RouterView`
 
@@ -41,7 +43,7 @@ Keep `App.vue` focused on global shell concerns. Do not move page-specific logic
 
 ## Routing
 
-Routes live in [`src/router/index.ts`](/Users/stefan/src/playground/claude-code/my-app/src/router/index.ts).
+Routes live in `src/router/index.ts`.
 
 Current routes:
 
@@ -66,7 +68,7 @@ This app currently uses two different data buckets:
 
 ### Local UI state
 
-Theme state is centralized in [`src/composables/useTheme.ts`](/Users/stefan/src/playground/claude-code/my-app/src/composables/useTheme.ts).
+Theme state is centralized in `src/composables/useTheme.ts`.
 
 It wraps VueUse `useDark()` and standardizes:
 
@@ -74,18 +76,21 @@ It wraps VueUse `useDark()` and standardizes:
 - the DOM selector and class used for dark mode
 - the toggle API used by components
 
-Theme constants live in [`src/theme/constants.ts`](/Users/stefan/src/playground/claude-code/my-app/src/theme/constants.ts).
+Theme constants live in `src/theme/constants.ts`.
 
 If you need another global UI preference with similar behavior, follow this composable-first pattern instead of duplicating storage and DOM logic in components.
 
 ### Remote/server state
 
-[`src/views/VideosView.vue`](/Users/stefan/src/playground/claude-code/my-app/src/views/VideosView.vue) shows the intended pattern:
+The YouTube trending feature is split between `src/views/VideosView.vue` and `src/composables/trendingVideosQuery.ts`.
+
+Current pattern:
 
 - `useQuery` from Vue Query owns the request lifecycle
 - `ofetch` performs the HTTP request
 - query settings such as `staleTime`, `enabled`, and `retry` live next to the query
-- derived UI messages are computed from the query result
+- derived UI messages stay in the view
+- a missing `VITE_YOUTUBE_API_KEY` disables the query instead of issuing a broken request
 
 For new server-backed screens:
 
@@ -113,9 +118,9 @@ The styling system has three layers. They serve different purposes.
 
 ### 1. PrimeVue component theme
 
-[`src/theme/preset.ts`](/Users/stefan/src/playground/claude-code/my-app/src/theme/preset.ts) defines the PrimeVue preset used by the app.
+`src/theme/preset.ts` defines the PrimeVue preset used by the app.
 
-Right now it simply wraps Aura:
+Right now it wraps Lara with no custom token overrides:
 
 - it gives the app a stable theme entrypoint
 - it allows future component-token customization without rewriting `main.ts`
@@ -130,7 +135,7 @@ Use `preset.ts` when you want to globally change how PrimeVue components look, s
 
 ### 2. App-wide styling primitives
 
-[`src/assets/main.css`](/Users/stefan/src/playground/claude-code/my-app/src/assets/main.css) is the home for shared app-level primitives.
+`src/assets/main.css` is the home for shared app-level primitives.
 
 Current examples:
 
@@ -179,11 +184,12 @@ Dark mode is class-based and uses `.dark` on `<html>`.
 
 The pieces are:
 
-- [`src/composables/useTheme.ts`](/Users/stefan/src/playground/claude-code/my-app/src/composables/useTheme.ts): source of truth for runtime theme state
-- [`src/theme/constants.ts`](/Users/stefan/src/playground/claude-code/my-app/src/theme/constants.ts): shared constants
-- [`index.html`](/Users/stefan/src/playground/claude-code/my-app/index.html): pre-paint script to avoid flash
-- [`src/main.ts`](/Users/stefan/src/playground/claude-code/my-app/src/main.ts): PrimeVue watches `.dark`
-- [`src/assets/main.css`](/Users/stefan/src/playground/claude-code/my-app/src/assets/main.css): Tailwind `dark:` variant is configured with `@custom-variant`
+- `src/composables/useTheme.ts`: source of truth for runtime theme state
+- `src/theme/constants.ts`: shared constants
+- `index.html`: pre-paint script to avoid flash and respect stored or system preference
+- `src/main.ts`: PrimeVue watches `.dark`
+- `src/assets/main.css`: Tailwind `dark:` variant is configured with `@custom-variant`
+- `vite.config.ts`: injects theme constants into the HTML bootstrap script
 
 If you change dark-mode storage or selector behavior, update the composable/constants path rather than patching components directly.
 
@@ -195,7 +201,7 @@ General component guidance:
 - keep small reusable render helpers in `src/components/`
 - prefer typed props and plain data over `v-html`
 
-[`src/components/TextWithLinks.vue`](/Users/stefan/src/playground/claude-code/my-app/src/components/TextWithLinks.vue) is the current example of a small focused reusable component.
+`src/components/TextWithLinks.vue` is the current example of a small focused reusable component.
 
 Create a new component when:
 
@@ -207,11 +213,11 @@ If something is only a page-local fragment, keep it in the view until reuse beco
 
 ## Logging
 
-[`src/utils/logger.ts`](/Users/stefan/src/playground/claude-code/my-app/src/utils/logger.ts) exports a tagged `consola` logger.
+`src/utils/logger.ts` exports a tagged `consola` logger.
 
 Use it for application logs instead of ad hoc `console.log` calls when the message is meaningful for debugging or error reporting.
 
-Create child tags with `logger.withTag(...)` for feature-level logging, as shown in `VideosView`.
+Create child tags with `logger.withTag(...)` for feature-level logging, as shown in the YouTube query composable.
 
 ## Directory Guide
 
@@ -221,9 +227,11 @@ Create child tags with `logger.withTag(...)` for feature-level logging, as shown
 - `src/views/`: route-level pages
 - `src/components/`: reusable UI pieces
 - `src/composables/`: reusable logic hooks
+- `src/stores/`: shared client-side state, if introduced
 - `src/theme/`: theme preset and theme-related constants
 - `src/assets/`: global CSS and static app assets
 - `src/utils/`: helpers that are not Vue-specific
+- `docs/architecture.md`: extension guide for future work
 
 If you need a new folder, prefer names that reflect runtime responsibility rather than implementation trivia.
 
@@ -244,12 +252,14 @@ When adding a feature, use this decision path:
 6. Is it a global PrimeVue look-and-feel change?
    Update `src/theme/preset.ts`.
 
-## Current Gaps
+## Current Status
 
 These parts are intentionally minimal right now:
 
-- `preset.ts` exists but currently mirrors Aura defaults
-- Pinia is installed but unused
-- the README is still template-like and should eventually link to this document
+- `src/theme/preset.ts` exists but currently mirrors Lara defaults
+- Pinia is installed and registered but unused
+- `AboutView` is still placeholder content
+- the Videos page is the only example of remote data fetching
+- the README now points here for extension guidance
 
 That is acceptable. Extend these pieces only when the app actually needs them.
